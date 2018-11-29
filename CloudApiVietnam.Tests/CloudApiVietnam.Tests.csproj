@@ -112,7 +112,7 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AccountControllerTest.cs" />
+    <Compile Include="Controllers\AccountControllerTests.cs" />
     <Compile Include="Controllers\FormContentControllerTest.cs" />
     <Compile Include="Controllers\ImagesTest.cs" />
     <Compile Include="Controllers\FormulierenControllerTest.cs" />

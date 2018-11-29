@@ -37,7 +37,22 @@ namespace CloudApiVietnam.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
-        
+
+        [Required]
+        [Display(Name = "Voornaam")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Achternaam")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
+        public string LastName { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Geboortedatum")]
+        public string DateOfBirth { get; set; }
+
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]

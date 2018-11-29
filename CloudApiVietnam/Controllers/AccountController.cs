@@ -18,6 +18,7 @@ using CloudApiVietnam.Providers;
 using CloudApiVietnam.Results;
 using System.Linq;
 using System.Net;
+using System.Collections;
 
 namespace CloudApiVietnam.Controllers
 {
@@ -70,17 +71,46 @@ namespace CloudApiVietnam.Controllers
         }
 
         //GET /api/Account
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public HttpResponseMessage Get()
         {
             try
             {
+                // Check of er filtering is
+                Dictionary<string, string> filter = Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
+                
                 //Haal de users op uit de database
                 List<UserInfo> usersInfo = new List<UserInfo>();
-                List<User> users = db.Users.ToList();
-                if(users == null)
-                    return Request.CreateErrorResponse(HttpStatusCode.NoContent, "There are no users in the database.");
-                
+                List<User> users = new List<User>();
+              
+                if (filter.Count > 0)
+                {
+                    foreach (KeyValuePair<string, string> entry in filter)
+                    {
+                        DateTime date = new DateTime(Convert.ToInt32(entry.Value), 1, 1);
+                        switch (entry.Key)
+                        {
+                            case "bornAfter":
+                                users = db.Users.Where(x => x.BirthDate > date).ToList();
+                                break;
+                            case "bornBefore":
+                                users = db.Users.Where(x => x.BirthDate < date).ToList();
+                                break;
+                            default:
+                                users = db.Users.ToList();
+                                break;
+                        }
+                    }
+                    if (users == null)
+                        return Request.CreateErrorResponse(HttpStatusCode.NoContent, "There are no users in the database with this filtering.");
+                } else
+                {
+                    users = db.Users.ToList();
+                    if (users == null)
+                        return Request.CreateErrorResponse(HttpStatusCode.NoContent, "There are no users in the database.");
+                }
+
                 //Zet alle users van de database om naar users die getoond kunnen worden.
                 foreach (User user in users)
                 {
@@ -89,7 +119,10 @@ namespace CloudApiVietnam.Controllers
                         Id = user.Id,
                         Email = user.Email,
                         Roles = user.Roles,
-                        UserName = user.UserName
+                        UserName = user.UserName,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        DateOfBirth = user.BirthDate
                     };
                     usersInfo.Add(info);
                 }
@@ -101,7 +134,8 @@ namespace CloudApiVietnam.Controllers
         }
 
         //GET /api/Account/{id}
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public HttpResponseMessage Get(string id)
         {
             try
@@ -118,7 +152,10 @@ namespace CloudApiVietnam.Controllers
                     Id = user.Id,
                     Email = user.Email,
                     Roles = user.Roles,
-                    UserName = user.UserName
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    DateOfBirth = user.BirthDate
                 };
                 return Request.CreateResponse(HttpStatusCode.OK, info);
             }
@@ -127,10 +164,11 @@ namespace CloudApiVietnam.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong. Exception: " + ex);
             }
         }
-               
+
         //POST /api/Account
         //Voor nu even AllowAnonymous voor het eenvoudig testen[]
-        [Authorize(Roles ="Admin")]
+        //[Authorize(Roles ="Admin")]
+        [AllowAnonymous]
         public HttpResponseMessage Post(RegisterBindingModel model)
         {
             try
@@ -142,7 +180,10 @@ namespace CloudApiVietnam.Controllers
                 var user = new User
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    BirthDate = Convert.ToDateTime(model.DateOfBirth)
                 };
 
                 IdentityResult result = new IdentityResult();
@@ -227,6 +268,11 @@ namespace CloudApiVietnam.Controllers
 
                         //Vervang de user Email
                         user.Email = model.Email;
+                        // Vervang username (=email), voornaam, achternaam & geboortedatum
+                        user.UserName = model.Email;
+                        user.FirstName = model.FirstName;
+                        user.LastName = model.LastName;
+                        user.BirthDate = Convert.ToDateTime(model.DateOfBirth);
                     }
 
                     //Sla de changes op

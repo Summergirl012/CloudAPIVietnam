@@ -313,6 +313,10 @@
     <Compile Include="Migrations\201811061910549_IgnoreCliamsAndLogins.Designer.cs">
       <DependentUpon>201811061910549_IgnoreCliamsAndLogins.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811291006203_AddedMoreUserInfo.cs" />
+    <Compile Include="Migrations\201811291006203_AddedMoreUserInfo.Designer.cs">
+      <DependentUpon>201811291006203_AddedMoreUserInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -385,6 +389,7 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
+    <None Include="Properties\PublishProfiles\CloudApiSusanne - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\CloudApiVietnam - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -405,7 +410,9 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -490,6 +497,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811061910549_IgnoreCliamsAndLogins.resx">
       <DependentUpon>201811061910549_IgnoreCliamsAndLogins.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811291006203_AddedMoreUserInfo.resx">
+      <DependentUpon>201811291006203_AddedMoreUserInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
