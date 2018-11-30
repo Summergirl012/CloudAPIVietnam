@@ -88,7 +88,15 @@ namespace CloudApiVietnam.Controllers
                 {
                     foreach (KeyValuePair<string, string> entry in filter)
                     {
-                        DateTime date = new DateTime(Convert.ToInt32(entry.Value), 1, 1);
+                        DateTime date;
+                        try
+                        {
+                            date = new DateTime(Convert.ToInt32(entry.Value), 1, 1);
+                        } catch (Exception ex)
+                        {
+                            return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "The year you've filled in is not a valid year");
+                        }
+                        
                         switch (entry.Key)
                         {
                             case "bornAfter":
