@@ -191,9 +191,9 @@ namespace CloudApiVietnam.Controllers
                 {
                     result = UserManager.Create(user, model.Password);
                 }
-                catch
+                catch( Exception e)
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, "The user could not be added.");
+                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, e.Message);
                 }
 
                 if (!result.Succeeded)

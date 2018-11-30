@@ -10,6 +10,7 @@ using System.Linq;
 
 namespace CloudApiVietnam.Tests.Controllers
 {
+
     /// <summary>
     /// Summary description for AccountControllerTest
     /// </summary>
@@ -17,6 +18,78 @@ namespace CloudApiVietnam.Tests.Controllers
     public class AccountControllerTest
     {
         [TestMethod]
+        public void Check_if_user_can_be_added()
+        {
+            // Arrange
+            var controller = new AccountController()
+            {
+                Request = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Post,
+                },
+                Configuration = new HttpConfiguration()
+            };
+            
+            RegisterBindingModel rbm = new RegisterBindingModel()
+            {
+                Email = "testuser@test.nl",
+                FirstName = "UserForTesting",
+                LastName = "LastNameForTesting",
+                DateOfBirth = "29-11-2018",
+                Password = "TestPass123!",
+                ConfirmPassword = "TestPass123!",
+                UserRole = "admin"
+            };
+
+            // Act
+            HttpResponseMessage result = controller.Post(rbm);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void Check_for_getAll()
+        {
+            // Arrange
+            var controller = new AccountController()
+            {
+                Request = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                },
+                Configuration = new HttpConfiguration()
+            };
+            
+            // Act
+            HttpResponseMessage result = controller.Get();
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void Check_for_get_one()
+        {
+            // Arrange
+            var controller = new AccountController()
+            {
+                Request = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                },
+                Configuration = new HttpConfiguration()
+            };
+
+            // Act
+            HttpResponseMessage result = controller.Get("81ec4bff-3bf7-4406-ba04-792179589b00");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        // Dit was het origineel wat opgeleverd was. Dit heb ik gecommend omdat het niet van toepassing is (Verkeerd geschreven tests)
+       /* [TestMethod]
         [TestCleanup()]
         public void Delete_Succes()
         {
@@ -134,17 +207,6 @@ namespace CloudApiVietnam.Tests.Controllers
             List<FormContent> FormContentId;
             Assert.IsTrue(actionResult.TryGetContentValue<List<FormContent>>(out FormContentId));
             return FormContentId.FirstOrDefault().Id;
-        }
-
-
-
-
-        private static int FormContentId { get; set; }
-
-        FormContentController controller = new FormContentController
-        {
-            Request = new System.Net.Http.HttpRequestMessage(),
-            Configuration = new HttpConfiguration()
-        };
+        }*/
     }
 }
