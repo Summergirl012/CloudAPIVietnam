@@ -102,13 +102,15 @@ namespace CloudApiVietnam.Controllers
                                 break;
                         }
                     }
-                    if (users == null)
+                    if(users.Count == 0)
                         return Request.CreateErrorResponse(HttpStatusCode.NoContent, "There are no users in the database with this filtering.");
                 } else
                 {
                     users = db.Users.ToList();
-                    if (users == null)
-                        return Request.CreateErrorResponse(HttpStatusCode.NoContent, "There are no users in the database.");
+                    // Foute if. Users.count = null, not users.
+                    //if (users == null)
+                    if(users.Count == 0)
+                    return Request.CreateErrorResponse(HttpStatusCode.NoContent, "There are no users in the database.");
                 }
 
                 //Zet alle users van de database om naar users die getoond kunnen worden.
